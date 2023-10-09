@@ -47,6 +47,11 @@ xlabelsGROUPS = {'Pre','24h','48h','72h'};
 [ro41, co41] = ind2sub(size(an4),find(an4 <= 0.05 & an4 > 0.01));
 [ro42, co42] = ind2sub(size(an4),find(an4 <= 0.01));
 
+% Mild stroke - Severe stroke
+[ro51, co51] = ind2sub(size(an5),find(an5 <= 0.05 & an5 > 0.01));
+[ro52, co52] = ind2sub(size(an5),find(an5 <= 0.01));
+
+
 
 num = 1000; % for degradation
 m   = 9;    % Marker size
@@ -70,7 +75,7 @@ f = figure(1);
 clf
 f.Position(3:4) = [700 500];
 
-AX = get_axes([1,3],lx,mx,rx,dy,my,uy);
+AX = get_axes([1,4],lx,mx,rx,dy,my,uy);
 
 % Colormap positions:
 poscolormapGROUPS = rx + mx*2 + (1-lx-mx*2-rx)*1.33;
@@ -138,7 +143,7 @@ clim([-1 1])
 
 title(AX(2), 'NS - MS', 'FontSize', fontSize, 'Interpreter','latex')
 
-% SUBPLOT 2: NO STROKE - MILD STROKE
+% SUBPLOT 3: NO STROKE - SEVERE STROKE
 imagesc(AX(3), a4)
 box off
 hold(AX(3), 'on')
@@ -156,11 +161,34 @@ plot(AX(3),co42+d,ro42,'*k','MarkerSize',m)
 plot(AX(3),co42-d,ro42,'*k','MarkerSize',m)
 plot(AX(3),co41,ro41,'*k','MarkerSize',m)
 
-title(AX(3), 'NS - SS', 'FontSize', fontSize, 'Interpreter','latex')
-
 colormap(AX(3), map)
 clim([-1 1])
-colBarGroups = colorbar(AX(3));
+
+title(AX(3), 'NS - SS', 'FontSize', fontSize, 'Interpreter','latex')
+
+% SUBPLOT 4: MILD STROKE - SEVERE STROKE
+imagesc(AX(4), a5)
+box off
+hold(AX(4), 'on')
+
+ax = AX(4);
+ax.YAxis.Visible = 'off';
+ax.XTickLabel = xlabelsGROUPS;
+ax.XTick = 1:4;
+ax.TickLabelInterpreter = 'latex';
+ax.FontSize = axisFontSize; 
+ax.XAxis.FontSize = axisXFontSize;
+clear ax
+
+plot(AX(4),co52+d,ro52,'*k','MarkerSize',m)
+plot(AX(4),co52-d,ro52,'*k','MarkerSize',m)
+plot(AX(4),co51,ro51,'*k','MarkerSize',m)
+
+title(AX(4), 'MS - SS', 'FontSize', fontSize, 'Interpreter','latex')
+
+colormap(AX(4), map)
+clim([-1 1])
+colBarGroups = colorbar(AX(4));
 colBarGroups.Label.String      = 'Normalized median error';
 colBarGroups.Label.Interpreter = 'latex';
 colBarGroups.Label.Rotation    = 90;
@@ -170,8 +198,7 @@ colBarGroups.Position(3)       = colormapPos3;
 colBarGroups.Label.Position(1) = colormapLabelPos1;
 colBarGroups.TickLabelInterpreter = 'latex';
 
-text(AX(3),colormapLabelPos1 + 2, 23/2, '(relative to NS)', 'Interpreter','latex','Rotation', 90, 'HorizontalAlignment','center','FontSize', colorbarFontSizeSub)
-
+% text(AX(4),colormapLabelPos1 + 2, 23/2, '(relative to NS)', 'Interpreter','latex','Rotation', 90, 'HorizontalAlignment','center','FontSize', colorbarFontSizeSub)
 
 if windows
     print(f, [path(1:id-1) projectFolder '\' currentFolder '\' resultsFolder '\fig4_anova.png'], '-r600', '-dpng')

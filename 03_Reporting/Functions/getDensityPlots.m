@@ -30,7 +30,7 @@ elseif subPlotNum == 2
 ylabel(' ', 'Interpreter','latex')
 elseif subPlotNum == 4
     ylabel(' ', 'Interpreter','latex')
-    l = legend('Stroke', 'No stroke');
+    l = legend('Mild stroke', 'Severe stroke');
     l.Position(1:2) = [0.5-l.Position(3)/2, 0.001];
     l.NumColumns = 2;
     l.Interpreter = 'latex'

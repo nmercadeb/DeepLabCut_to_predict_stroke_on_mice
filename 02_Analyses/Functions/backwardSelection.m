@@ -10,12 +10,15 @@ function model = backwardSelection(model, filePath, currentIter)
 abcd = {'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'};
     for k = 1:40
         [val, ind] = max(model.Coefficients.pValue(2:end));
+        modelVars = model.VariableNames(model.VariableInfo.InModel);
         if val <= 0.05
              writematrix(k-1, filePath, 'Sheet', 'Results', "Range", ['N' num2str(currentIter+3)], 'AutoFitWidth', false)
              writecell(model.VariableNames(model.VariableInfo.InModel)', filePath, 'Sheet', 'Results', 'Range', ['O' num2str(currentIter+3)])
+             break
+        end
+        if length(modelVars) == 1
             break
         end
-        modelVars = model.VariableNames(model.VariableInfo.InModel);
         model= removeTerms(model, modelVars{ind});
         writematrix(modelVars{ind}, filePath, 'Sheet', 'Results', "Range", [abcd{k} num2str(currentIter+3)])
     end

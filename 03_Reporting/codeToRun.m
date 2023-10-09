@@ -16,29 +16,26 @@ resultsFolder  = 'Results';
 
 % Jobs ----
 % Set to true the jobs you want to run:
-runAttrition           = false;
-runEvaluationFigure    = false;
-runExperimentalFigure  = false;
-runAnovaFigure         = false;
-runMainFeaturesFigure  = false;
-runModelAccuracyFigure = true;
-runSupplementaryFigure = true;
+runAttrition                = false;
+runEvaluationFigure         = false;
+runExperimentalFigure       = false;
+runAnovaFigure              = false;
+runMainFeaturesFigure       = false;
+runIBAFigure                = false;
+rungetStrokeOcurrenceFigure = false;
+runSupplementaryFigure      = false;
 
 % Main ----
 path=cd;
 id = strfind(path,projectFolder);
 
 if windows
-    v = dir ([path(1:id-1) projectFolder '\' DLCdata '\' DLCmouse '\**\*.mp4']);
-    c = dir ([path(1:id-1) projectFolder '\' DLCdata '\' DLCbox   '\**\*.csv']);
-    d = dir ([path(1:id-1) projectFolder '\' DLCdata '\' DLCmouse '\**\*.xlsx']);
+    d = dir ([path(1:id-1) projectFolder '\' DLCdata '\' DLCmouse '\**\*.csv']);
     dades    = readtable([path(1:id-1) projectFolder '\' featuresData '\dades.xlsx'],'Range','A1:AM563');
     exp_data  = readtable([path(1:id-1) projectFolder '\' expResults '\dades_model.xlsx']);
     
 else
-    v = dir ([path(1:id-1) projectFolder '/' DLCdata '/' DLCmouse '/**/*.mp4']);
-    c = dir ([path(1:id-1) projectFolder '/' DLCdata '/' DLCbox   '/**/*.csv']);
-    d = dir ([path(1:id-1) projectFolder '/' DLCdata '/' DLCmouse '/**/*.xlsx']);
+    d = dir ([path(1:id-1) projectFolder '/' DLCdata '/' DLCmouse '/**/*.csv']);
     dades    = readtable([path(1:id-1) projectFolder '/' featuresData '/dades.xlsx'],'Range','A1:AM563');
     exp_data  = readtable([path(1:id-1) projectFolder '/' expResults '/dades_model.xlsx']);
 end

@@ -13,9 +13,9 @@ percCorrect = sum(E)/length(E);
 percWrong   = sum(E == 0)/length(E);
 TP = sum(E == 1 & L >  0.95)/length(E);
 TN = sum(E == 0 & L <= 0.95)/length(E);
-FP = sum(E == 1 & L <= 0.95)/length(E);
+FP = sum(E == 1 & L <= 0.95)/length(L <= 0.95);
 FN = sum(E == 0 & L >  0.95)/length(E);
-bodyPart    = {"All", "Nose","Neck","Bottom","End tail","FI paw","FC paw","Tape","HI paw","HC paw"};
+bodyPart    = {"All", "Nose","Neck","Bottom","End tail","FL paw","FR paw","Tape","HL paw","HF paw"};
 
 col = lines(2);
 
@@ -24,7 +24,7 @@ BPchar = {"Nose","Neck","Bottom","End tail","FL paw","FR paw","Tape","HL paw","H
 BP = visualResults.Var3;
 
 % TR DATA ----
-T = dades(~isnan(dades.Outilers1) & all(table2array(dades(:, 33:38))./dades.TotalFrames <= .1, 2), :);
+T = dades(~isnan(dades.TapeRemovalExperimental) & all(table2array(dades(:, 33:38))./dades.TotalFrames <= .1, 2), :);
 exp  = T.TapeRemovalExperimental;
 comp = T.TapeRemoval;
 
@@ -88,7 +88,7 @@ for j = 1:length(BPs)
     percCorrect = [percCorrect sum(E(BP == BPs{j}))/sum(BP == BPs{j})];
     percWrong   = [percWrong sum(E(BP == BPs{j}) == 0)/sum(BP == BPs{j})];
     TP = [TP sum(E == 1 & L >  0.95 & BP == BPs{j})/length(BP == BPs{j})];
-    TN = [TN sum(E == 0 & L <= 0.95 & BP == BPs{j})/length(BP == BPs{j})];
+    TN = [TN sum(E == 0 & L <= 0.95 & BP == BPs{j})/length(BP == BPs{j} & E == 0)];
     FP = [FP sum(E == 1 & L <= 0.95 & BP == BPs{j})/length(BP == BPs{j})];
     FN = [FN sum(E == 0 & L >  0.95 & BP == BPs{j})/length(BP == BPs{j})];
 

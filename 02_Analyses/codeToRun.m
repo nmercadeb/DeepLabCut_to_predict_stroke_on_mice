@@ -12,7 +12,7 @@ experimentalDataFolder = 'ExperimentalData';
 % Jobs ----
 % Set to true the jobs you want to run:
 runStatisticalAnalysis = false;
-runStrokeModel         = false;
+% Predictive model in R
 
 % Main ----
 path=cd;
@@ -27,4 +27,4 @@ end
 addpath('./Functions')
 
 if runStatisticalAnalysis, statisticalAnalysis,  end
-if runStrokeModel, strokeModel, end
+% Predictive model in R

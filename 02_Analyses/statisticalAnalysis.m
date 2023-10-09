@@ -2,12 +2,12 @@ T   = dades(~isnan(dades.Distance), :);
 
 features = table2array(T(:,8:27));
 
-indpre = ismember(T.Test,'TR - PRE');
-ind24 = ismember(T.Test,'TR - POST - 24H');
-ind48 = ismember(T.Test,'TR - POST - 48H');
-ind72 = ismember(T.Test,'TR - POST - 72H');
-inc = ismember(T.TapeSide,'Contralateral');
-ini = ~ismember(T.TapeSide,'Contralateral');
+indpre = ismember(T.Test, 'TR - PRE');
+ind24 = ismember(T.Test, 'TR - POST - 24H');
+ind48 = ismember(T.Test, 'TR - POST - 48H');
+ind72 = ismember(T.Test, 'TR - POST - 72H');
+inc = ismember(T.TapeSide, 'Contralateral');
+ini = ~ismember(T.TapeSide, 'Contralateral');
 indI = T.Infart > 0;
 
 features = table2array(T(:,8:27));
@@ -38,8 +38,8 @@ for i = 1:l+2
 
     preno   = fpre(find(~infpre));
     presi   = fpre(find(infpre));
-    prelleu = fpre(find(infpre<30 & infpre>0));
-    presev  = fpre(find(infpre>=30));
+    prelleu = fpre(find(infpre<28 & infpre>0));
+    presev  = fpre(find(infpre>=28));
     
     % ANOVA WITH PRE
     for j = 1:3
@@ -53,8 +53,8 @@ for i = 1:l+2
             feature = features(index(:,j+1),i);
             Infart = T.Infart(index(:,j+1));
         end        
-        sev  = find(Infart >= 30);
-        lleu = find(Infart > 0 & Infart < 30);
+        sev  = find(Infart >= 28);
+        lleu = find(Infart > 0 & Infart < 28);
         fno   = feature(find(~Infart));  fno(isnan(fno))     = [];
         fsi   = feature(find(Infart));   fsi(isnan(fsi))     = [];
         flleu = feature(lleu);            flleu(isnan(flleu)) = [];
@@ -92,8 +92,8 @@ for i = 1:l+2
         end       
         Infart(isnan(feature))  = [];
         feature(isnan(feature)) = [];
-        sev  = find(Infart >= 30);
-        lleu = find(Infart > 0 & Infart < 30);
+        sev  = find(Infart >= 28);
+        lleu = find(Infart > 0 & Infart < 28);
         fno   = feature(find(~Infart));  fno(isnan(fno))     = [];
         fsi   = feature(find(Infart));   fsi(isnan(fsi))     = [];
         flleu = feature(lleu);           flleu(isnan(flleu)) = [];
@@ -140,17 +140,19 @@ end
 
 
 if windows
-    save('.\Results\statisticalResults.mat', 'a11', 'a12', 'a13', 'a14', ...
-    'an11', 'an12', 'an13', 'an14', ...
-    'a2', 'a3', 'a4', 'a5', ...
-    'an2', 'an3', 'an4', 'an5', ...
-    'li', 'po', 'bi', '-mat')
+    save('.\Results\statisticalResults.mat', ...
+        'a11', 'a12', 'a13', 'a14', ...
+        'an11', 'an12', 'an13', 'an14', ...
+        'a2', 'a3', 'a4', 'a5', ...
+        'an2', 'an3', 'an4', 'an5', ...
+        'li', 'po', 'bi', '-mat')
 else
-    save('./Results/statisticalResults.mat', 'a11', 'a12', 'a13', 'a14', ...
-    'an11', 'an12', 'an13', 'an14', ...
-    'a2', 'a3', 'a4', 'a5', ...
-    'an2', 'an3', 'an4', 'an5', ...
-    'li', 'po', 'bi', '-mat')
+    save('./Results/statisticalResults.mat', ...
+        'a11', 'a12', 'a13', 'a14', ...
+        'an11', 'an12', 'an13', 'an14', ...
+        'a2', 'a3', 'a4', 'a5', ...
+        'an2', 'an3', 'an4', 'an5', ...
+        'li', 'po', 'bi', '-mat')
 end
 
 % Create table with statistical significant results:
@@ -161,7 +163,7 @@ exclude = (an2(1:end-2,1) < 0.05)' | (an3(1:end-2,1) < 0.05)' | (an4(1:end-2,1) 
 startingFeatures_index = find(inlcude & ~exclude) + 7;
 ind   = ~ismember(dades.Test,'TR - PRE') & ~isnan(dades.vm_paw_ipsi) & ~isnan(dades.vm_paw_contra);
 T = dades(ind,[1:7, startingFeatures_index, 30]);
-
+%%
 if windows
     writetable(T, '.\Results\dataForStrokeModel.xlsx')
 else

@@ -15,10 +15,16 @@ yObs_I  = [];
 yPred_G = [];
 yObs_G  = [];
 
+ 
+
 for jj = 1:numIter
     [test, train] = splitData(data, mouseToTrain);
-
-    model = fitglm(train, formula_inicial, 'Distribution', 'binomial');
+    
+    if any(data.Infart > 1)
+        model = fitlm(train, formula_inicial);
+    else
+        model = fitglm(train, formula_inicial, 'Distribution', 'binomial');
+    end
 
     writematrix(jj, filePath, 'Sheet', 'Results', "Range", ['A' num2str(jj+3)], 'AutoFitWidth', false)
     writematrix(size(data,2)-2, filePath, 'Sheet', 'Results', "Range", ['M' num2str(jj+3)], 'AutoFitWidth', false)

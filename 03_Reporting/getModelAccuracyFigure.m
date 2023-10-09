@@ -1,5 +1,4 @@
 % DATA ----
-
 if windows
     filePath_C = [path(1:id-1) projectFolder '\' analysesFolder '\Results\BS_comp.xlsx' ];
     filePath_E = [path(1:id-1) projectFolder '\' analysesFolder '\Results\BS_exp.xlsx' ];
