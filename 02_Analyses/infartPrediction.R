@@ -30,7 +30,7 @@ clean <- dades %>%
   tidyr::pivot_wider(names_from = c("side"), 
                      names_prefix = "TR",
                      values_from = c("Tape removal"), 
-                     values_fill = 0) %>%
+                     values_fill = NA) %>%
   mutate(Test = substr(Test, 13, 16)) %>%
   group_by(Mouse, Infart, Test) %>%
   summarise("TRcontra" = mean(.data$TRcontra, na.rm = TRUE), 
@@ -56,7 +56,8 @@ lasso_data <- clean %>%
                                      "vm_nose",	"vm_butt",	"vm_tail_end",	"vm_paw_IPSI",
                                      "vm_paw_CONTRA",	"vm_paw_ipsi",	"vm_paw_contra",	
                                      "d_Paws",	"Tail_curvature_C"), 
-                     values_fill = 0)  
+                     values_fill = 0)  %>% 
+  filter(!if_any(names(lasso_data), ~is.na(.x)))
 
 
 ## Infart lasso ----
