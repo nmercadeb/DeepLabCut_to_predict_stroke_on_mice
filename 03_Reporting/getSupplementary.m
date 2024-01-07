@@ -74,7 +74,7 @@ for k = 1:12 % nombre de variables a plotjear
     
     if k == 9 % Per la llegenda
        plot(nan,nan,'-o','Color',coln,'MarkerEdgeColor',coln,'MarkerFaceColor',coln)
-        plot(nan,nan,'-s','Color',coli,'MarkerEdgeColor',coli,'MarkerFaceColor',coli)
+%         plot(nan,nan,'-s','Color',coli,'MarkerEdgeColor',coli,'MarkerFaceColor',coli)
         plot(nan,nan,'-^','Color',coll,'MarkerEdgeColor',coll,'MarkerFaceColor',coll)
         plot(nan,nan,'-v','Color',cols,'MarkerEdgeColor',cols,'MarkerFaceColor',cols)
     end
@@ -83,9 +83,9 @@ for k = 1:12 % nombre de variables a plotjear
         (std(v2n)/sqrt(length(v2n)))*1.96 (std(v3n)/sqrt(length(v3n)))*1.96 (std(v4n)/sqrt(length(v4n)))*1.96], ...
         '-o','Color',coln,'MarkerEdgeColor',coln,'MarkerFaceColor',coln)
 
-    errorbar([1 2 3 4],[mean(v1i) mean(v2i) mean(v3i) mean(v4i)],[(std(v1i)/sqrt(length(v1i)))*1.96 ...
-        (std(v2i)/sqrt(length(v2i)))*1.96 (std(v3i)/sqrt(length(v3i)))*1.96 (std(v4i)/sqrt(length(v4i)))*1.96], ...
-        '-s','Color',coli,'MarkerEdgeColor',coli,'MarkerFaceColor',coli)
+%     errorbar([1 2 3 4],[mean(v1i) mean(v2i) mean(v3i) mean(v4i)],[(std(v1i)/sqrt(length(v1i)))*1.96 ...
+%         (std(v2i)/sqrt(length(v2i)))*1.96 (std(v3i)/sqrt(length(v3i)))*1.96 (std(v4i)/sqrt(length(v4i)))*1.96], ...
+%         '-s','Color',coli,'MarkerEdgeColor',coli,'MarkerFaceColor',coli)
 
     errorbar([1 2 3 4]+0.15,[mean(v1l) mean(v2l) mean(v3l) mean(v4l)],[(std(v1l)/sqrt(length(v1l)))*1.96 ...
         (std(v2l)/sqrt(length(v2l)))*1.96 (std(v3l)/sqrt(length(v3l)))*1.96 (std(v4l)/sqrt(length(v4l)))*1.96], ...
@@ -125,7 +125,7 @@ for k = 1:12 % nombre de variables a plotjear
     ax.XAxis.Limits = [0.6 4.4];
 
     if k == 9
-        leg = legend('No stroke', 'Stroke', 'Mild stroke', 'Severe stroke');        
+        leg = legend('No stroke', 'Mild stroke', 'Severe stroke');        
         leg.NumColumns = 5;
         leg.Position(1:2) = [0.5-leg.Position(3)/2 0.01];
         leg.FontSize = legFontSize;
@@ -138,4 +138,10 @@ if windows
     print(f, [path(1:id-1) projectFolder '\' currentFolder '\' resultsFolder '\supFig1_mainFeatures.png'], '-r600', '-dpng')
 else
     print(f, [path(1:id-1) projectFolder '/' currentFolder '/' resultsFolder '/supFig1_mainFeatures.png'], '-r600', '-dpng')
+end
+
+if windows
+    print(f, [path(1:id-1) projectFolder '\' currentFolder '\' resultsFolder '\supFig1_mainFeatures.tiff'], '-r600', '-dtiff')
+else
+    print(f, [path(1:id-1) projectFolder '/' currentFolder '/' resultsFolder '/supFig1_mainFeatures.tiff'], '-r600', '-dtiff')
 end

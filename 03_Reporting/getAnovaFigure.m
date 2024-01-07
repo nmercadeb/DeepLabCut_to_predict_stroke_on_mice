@@ -189,7 +189,7 @@ title(AX(4), 'MS - SS', 'FontSize', fontSize, 'Interpreter','latex')
 colormap(AX(4), map)
 clim([-1 1])
 colBarGroups = colorbar(AX(4));
-colBarGroups.Label.String      = 'Normalized median error';
+colBarGroups.Label.String      = 'Normalized relative difference';
 colBarGroups.Label.Interpreter = 'latex';
 colBarGroups.Label.Rotation    = 90;
 colBarGroups.Label.FontSize    = colormapFontSize;
@@ -204,4 +204,10 @@ if windows
     print(f, [path(1:id-1) projectFolder '\' currentFolder '\' resultsFolder '\fig4_anova.png'], '-r600', '-dpng')
 else
     print(f, [path(1:id-1) projectFolder '/' currentFolder '/' resultsFolder '/fig4_anova.png'], '-r600', '-dpng')
+end
+
+if windows
+    print(f, [path(1:id-1) projectFolder '\' currentFolder '\' resultsFolder '\fig4_anova.tiff'], '-r600', '-dtiff')
+else
+    print(f, [path(1:id-1) projectFolder '/' currentFolder '/' resultsFolder '/fig4_anova.tiff'], '-r600', '-dtiff')
 end

@@ -40,10 +40,17 @@ plot(rand(1,sum(FPind))*0.49 + 0.505,dades_stroke.predicted(FPind),'o','Color',r
 plot(rand(1,sum(TPind))*0.49 + 0.005,dades_stroke.predicted(TPind),'o','Color',green,'MarkerFaceColor',green)
 plot(rand(1,sum(FNind))*0.49 + 0.005,dades_stroke.predicted(FNind),'o','Color',red,'MarkerFaceColor',red)
 
-text(0.25,0.75,[num2str(sum(TPind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
-text(0.75,0.75,[num2str(sum(FPind)/length(dades_stroke.predicted)*100, "%.0f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
-text(0.25,0.25,[num2str(sum(FNind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
-text(0.75,0.25,[num2str(sum(TNind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
+text(0.25,0.70,[num2str(sum(TPind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
+text(0.25,0.80, "TP" ,'Interpreter','latex','HorizontalAlignment','center','FontSize',18, 'FontWeight','bold')
+
+text(0.75,0.70,[num2str(sum(FPind)/length(dades_stroke.predicted)*100, "%.0f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
+text(0.75,0.80, "FP" ,'Interpreter','latex','HorizontalAlignment','center','FontSize',18, 'FontWeight','bold')
+
+text(0.25,0.20,[num2str(sum(FNind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
+text(0.25,0.30, "FN" ,'Interpreter','latex','HorizontalAlignment','center','FontSize',18, 'FontWeight','bold')
+
+text(0.75,0.20,[num2str(sum(TNind)/length(dades_stroke.predicted)*100, "%.2f") '\%'],'Interpreter','latex','HorizontalAlignment','center','FontSize',18)
+text(0.75,0.30, "TN" ,'Interpreter','latex','HorizontalAlignment','center','FontSize',18, 'FontWeight','bold')
 
 % text(1.1,0.5,'PREDICTIONS','Interpreter','latex','HorizontalAlignment','center','FontSize',size_lab-1,'Rotation',270)
 % text(1.025,0.25,'No stroke','Interpreter','latex','HorizontalAlignment','center','FontSize',size_lab,'Rotation',270)

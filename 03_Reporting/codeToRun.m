@@ -47,5 +47,5 @@ if runEvaluationFigure, getEvaluationFigure, end
 if runExperimentalFigure, getExperimentalFigure, end
 if runAnovaFigure, getAnovaFigure, end
 if runMainFeaturesFigure, getMainFeaturesFigure, end
-if runModelAccuracyFigure, getModelAccuracyFigure, end
+if rungetStrokeOcurrenceFigure, getStrokeOcurrenceFigure, end
 if runSupplementaryFigure, getSupplementary, end
