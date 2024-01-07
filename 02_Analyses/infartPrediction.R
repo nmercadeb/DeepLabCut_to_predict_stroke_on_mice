@@ -3,6 +3,7 @@ library(dplyr)
 library(glmnet)
 library(ggplot2)
 
+## Prepare data ----
 featuresDataFolder     = '01_Features'  
 analysesFolder         = '02_Analyses'
 figureFolder           = '03_Reporting/Results'
@@ -56,7 +57,8 @@ lasso_data <- clean %>%
                                      "vm_nose",	"vm_butt",	"vm_tail_end",	"vm_paw_IPSI",
                                      "vm_paw_CONTRA",	"vm_paw_ipsi",	"vm_paw_contra",	
                                      "d_Paws",	"Tail_curvature_C"), 
-                     values_fill = 0)  %>% 
+                     values_fill = 0)  
+lasso_data <- lasso_data %>%
   filter(!if_any(names(lasso_data), ~is.na(.x)))
 
 
@@ -195,15 +197,52 @@ accuracy = sum(stroke_model_data$Infart ==
 
 
 ## Report ----
-## INfart
+## Infart
 ggplot(data = tibble(observed = infart_model_data$Infart,
                      predicted = predict(infart_model,
                                          infart_model_data)), 
-       aes(x = observed, y = predicted)) +
-  geom_point(size = 3) +
-  stat_smooth(method = "lm", c) +
-  xlab("Observed (Infarted brain area (%))") +
-  ylab("Predicted (Infarted brain area (%))")
+       aes(x = observed, y = predicted))  +
+  geom_rect(aes(xmin = 0, xmax = 28, ymin = 0, ymax = 28), 
+            fill = "green", 
+            alpha = 0.005, 
+            color = "green",
+            linetype = 0) +
+  geom_rect(aes(xmin = 28, xmax = 70, ymin = 28, ymax = 70), 
+            fill = "green", 
+            alpha = 0.005, 
+            color = "green",
+            linetype = 0) +
+  geom_rect(aes(xmin = 0, xmax = 28, ymin = 28, ymax = 70), 
+            fill = "red", 
+            alpha = 0.005, 
+            color = "red",
+            linetype = 0) +
+  geom_rect(aes(xmin = 28, xmax = 70, ymin = 0, ymax = 28), 
+            fill = "red", 
+            alpha = 0.005, 
+            color = "red",
+            linetype = 0) +
+  geom_abline(slope = 1, intercept = 0, color = "#3a5a40", linewidth = 1) +
+  geom_hline(yintercept = 28, linetype = "dashed") +
+  geom_vline(xintercept = 28, linetype = "dashed") +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  xlab("Observed IBV (%)") +
+  ylab("Predicted IBV (%)") +
+  scale_y_continuous(breaks = seq.int(0,80,10), limits = c(0,70)) +
+  scale_x_continuous(breaks = seq.int(0,80,10), limits = c(0,70)) +
+  geom_point(data = tibble(observed = observed_infart,
+                           predicted = predicted_infart), 
+             aes(x = observed, y = predicted), size = 2, shape = 18, color = "#a3b18a") +
+  geom_point(size = 2, color = "#537A5A") +
+  theme_minimal() 
+
+
+ggsave(
+  gsub(analysesFolder, figureFolder, here("fig7_infartModel_background.png")),
+  last_plot(),
+  width = 5,
+  height = 5
+)
 
 ggplot(data = tibble(observed = infart_model_data$Infart,
                      predicted = predict(infart_model,
@@ -213,15 +252,15 @@ ggplot(data = tibble(observed = infart_model_data$Infart,
   geom_hline(yintercept = 28, linetype = "dashed") +
   geom_vline(xintercept = 28, linetype = "dashed") +
   geom_vline(xintercept = 0, linetype = "dashed") +
-  xlab("Observed IBA (%)") +
-  ylab("Predicted IBA (%)") +
+  xlab("Observed IBV (%)") +
+  ylab("Predicted IBV (%)") +
   scale_y_continuous(breaks = seq.int(0,80,10), limits = c(0,70)) +
   scale_x_continuous(breaks = seq.int(0,80,10), limits = c(0,70)) +
   geom_point(data = tibble(observed = observed_infart,
                            predicted = predicted_infart), 
              aes(x = observed, y = predicted), size = 2, shape = 18, color = "#a3b18a") +
   geom_point(size = 2, color = "#537A5A") +
-  theme_minimal()
+  theme_minimal() 
 
 
 ggsave(
@@ -230,6 +269,7 @@ ggsave(
   width = 5,
   height = 5
 )
+
 ## Stroke
 stroke_id <- which(observed_stroke == 1)
 noStroke_id <- which(observed_stroke == 0)
@@ -244,68 +284,3 @@ specificity = TN/(FP+TN)
 PPV = TP/(TP+FP)
 NPV = TN/(TN+FN) 
   
- # ### manual ----
-# x <- readxl::read_xlsx("C:/Users/nmercade/Dropbox/CMCiB-Nuria/projectCodes/ExperimentalData/dades_model.xlsx")
-# 
-# data_adjust <- x %>% 
-#   filter(time %in% c(24,48,72)) %>% 
-#   dplyr::select(-"MEAN TAPE REMOVAL") %>% 
-#   tidyr::pivot_wider(names_from = time, 
-#                      values_from = c("BWC", "TAIL HANGING", "ROTAROD", "TAPE REMOVAL CTL", "TAPE REMOVAL IPSI")) %>%
-#   dplyr::select(-`ligature side`)
-# 
-# 
-# nam <- names(data_adjust)
-# contributions <- rep(0, length(nam)-1)
-# names(contributions) <- names(data_adjust[,-1])
-# 
-# X <- as.matrix(makeX(data_adjust %>% dplyr::select(-Infart, -Mouse), na.impute = TRUE))
-# Y <- data_adjust$Infart
-# lambdas   <- 10^seq(2, -3, by = -.1)
-# 
-# for (ii in 1:100) {
-#   lasso_reg <- cv.glmnet(X, Y, alpha = 1, lambda = lambdas, standardize = TRUE, nfolds = 5, family = "poisson")
-#   coef.lasso_reg <- coef(lasso_reg, s = lasso_reg$lambda.1se)
-#   var.lasso_reg  <- names(coef.lasso_reg[(coef.lasso_reg[,1]!=0),1])[-1]
-#   var.lasso_reg  <- gsub("`", "", var.lasso_reg)
-#   
-#   contributions[which(names(contributions) %in% var.lasso_reg)] <- contributions[which(names(contributions) %in% var.lasso_reg)] + 1
-# }
-# 
-# predictors <- names(contributions)[contributions > 70]
-# id_col          <- which(nam %in% c(predictors, "Infart", "Mouse"))
-# 
-# model_data <- lasso_data[,id_col] 
-# 
-# infart_model <- lm(Infart ~ ., data = model_data %>% dplyr::select(-Mouse))
-# summary(infart_model)
-# tibble(observed = model_data$Infart, predicted = predict(infart_model, model_data)) %>%
-#   ggplot2::ggplot(aes(x = observed, y = predicted)) +
-#   geom_point()
-# 
-# # test:
-# predicted <- NULL
-# observed <- NULL
-# for (ii in 1:200) {
-#   test_id <- sample(model_data$Mouse, 4)
-#   test <- model_data %>% 
-#     filter(Mouse %in% test_id) %>% 
-#     dplyr::select(-Mouse)
-#   train <- model_data %>% 
-#     anti_join(test, 
-#               by = c("Infart", "Tape removal_contra_ 24H")) %>% 
-#     dplyr::select(-Mouse)
-#   mdl = lm(Infart ~ ., train)
-#   predicted <- c(predicted, predict(mdl, test))
-#   observed <- c(observed, test$Infart)
-# }
-# 
-# r2 <- 1 - ( sum((observed-predicted)**2, na.rm = TRUE) / sum((observed - mean(observed))**2 ))
-# n = 20
-# k = length(predictors)
-# r2a <- 1 - (((1-r2) * (n - 1))/(n - k - 1))
-# 
-# 
-# tibble(observed = observed, predicted = predicted) %>%
-#   ggplot2::ggplot(aes(x = observed, y = predicted)) +
-#   geom_point()

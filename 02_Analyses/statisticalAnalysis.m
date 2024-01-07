@@ -60,13 +60,13 @@ for i = 1:l+2
         flleu = feature(lleu);            flleu(isnan(flleu)) = [];
         fsev  = feature(sev);             fsev(isnan(fsev))   = [];
         %   1.1. NO
-        a11(i,j) = (median(preno) - median(fno))/median(preno);
+        a11(i,j) = (median(fno) - median(preno))/sqrt(median(preno)^2 + median(fno)^2);
         %   1.2. SI
-        a12(i,j) = (median(presi) - median(fsi))/median(presi);
+        a12(i,j) = (median(fsi) - median(presi))/sqrt(median(presi)^2 + median(fsi)^2);
         %   1.3. LLEU
-        a13(i,j) = (median(prelleu) - median(flleu))/median(prelleu);
+        a13(i,j) = (median(flleu) - median(prelleu))/sqrt(median(prelleu)^2 + median(flleu)^2);
         %   1.4. SEVER
-        a14(i,j) = (median(presev) - median(fsev))/median(presev);
+        a14(i,j) = (median(fsev) - median(presev))/sqrt(median(presev)^2 + median(fsev)^2);
 
         %   1.1. NO      
         an11(i,j) = anova1([preno;fno],[preno.*0+1;fno.*0+2],'off');
@@ -99,16 +99,16 @@ for i = 1:l+2
         flleu = feature(lleu);           flleu(isnan(flleu)) = [];
         fsev  = feature(sev);            fsev(isnan(fsev))   = [];
         % 2. Entre NO - SI
-        a2(i,k) = (median(fno) - median(fsi))/sqrt(median(fno)^2 + median(fsi)^2);
+        a2(i,k) = (median(fsi) - median(fno))/sqrt(median(fno)^2 + median(fsi)^2);
         an2(i,k) = anova1([fno;fsi],[fno.*0+1;fsi.*0+2],'off');
         % 3. Entre NO - LLEU
-        a3(i,k) = (median(fno) - median(flleu))/sqrt(median(fno)^2 + median(flleu)^2);
+        a3(i,k) = (median(flleu) - median(fno))/sqrt(median(fno)^2 + median(flleu)^2);
         an3(i,k) = anova1([fno;flleu],[fno.*0+1;flleu.*0+2],'off');
         % 4. Entre NO - SEVER
-        a4(i,k) = (median(fno) - median(fsev))/sqrt(median(fno)^2 + median(fsev)^2);
+        a4(i,k) = (median(fsev) - median(fno))/sqrt(median(fno)^2 + median(fsev)^2);
         an4(i,k) = anova1([fno;fsev],[fno.*0+1;fsev.*0+2],'off');
         % 5. Entre LLEU - SEVER
-        a5(i,k) = (median(flleu) - median(fsev))/sqrt(median(flleu)^2 + median(fsev)^2);
+        a5(i,k) = (median(fsev) - median(flleu))/sqrt(median(flleu)^2 + median(fsev)^2);
         an5(i,k) = anova1([flleu;fsev],[flleu.*0+1;fsev.*0+2],'off');
 
         % LINEAR, EXPONENTIAL & LOGISTIC REGRESSIONS 
@@ -163,7 +163,7 @@ exclude = (an2(1:end-2,1) < 0.05)' | (an3(1:end-2,1) < 0.05)' | (an4(1:end-2,1) 
 startingFeatures_index = find(inlcude & ~exclude) + 7;
 ind   = ~ismember(dades.Test,'TR - PRE') & ~isnan(dades.vm_paw_ipsi) & ~isnan(dades.vm_paw_contra);
 T = dades(ind,[1:7, startingFeatures_index, 30]);
-%%
+
 if windows
     writetable(T, '.\Results\dataForStrokeModel.xlsx')
 else
